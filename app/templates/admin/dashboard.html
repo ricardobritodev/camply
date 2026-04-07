@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}Admin — Camply{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+  <div class="flex items-center justify-between mb-8">
+    <h1 class="text-2xl font-bold text-gray-800">Painel Administrativo</h1>
+    <span class="text-sm text-gray-500">Olá, {{ current_user.name }}</span>
+  </div>
+
+  <!-- Cards de métricas -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+    {% set metrics = [
+      ('Usuários', stats.total_users, '👥', 'bg-blue-50 text-blue-600'),
+      ('Propriedades', stats.total_properties, '🏡', 'bg-green-50 text-green-600'),
+      ('Reservas', stats.total_bookings, '📋', 'bg-purple-50 text-purple-600'),
+      ('Receita (R$)', stats.total_revenue, '💰', 'bg-amber-50 text-amber-600'),
+    ] %}
+    {% for label, value, emoji, color in metrics %}
+    <div class="bg-white rounded-2xl border border-gray-100 p-6 hover:shadow-md transition-shadow">
+      <div class="flex items-center justify-between mb-3">
+        <span class="{{ color }} w-12 h-12 rounded-xl flex items-center justify-center text-2xl">{{ emoji }}</span>
+      </div>
+      <p class="text-3xl font-bold text-gray-800">{{ value }}</p>
+      <p class="text-sm text-gray-500 mt-1">{{ label }}</p>
+    </div>
+    {% endfor %}
+  </div>
+
+  <!-- Links de gestão -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <a href="{{ url_for('admin.users') }}"
+       class="bg-white rounded-2xl border border-gray-100 p-6 hover:shadow-md hover:border-primary-200 transition-all group">
+      <div class="text-4xl mb-3">👥</div>
+      <h3 class="font-semibold text-gray-800 group-hover:text-primary-600">Gerenciar Usuários</h3>
+      <p class="text-sm text-gray-500 mt-1">Visualizar e moderar contas de usuários</p>
+    </a>
+    <a href="{{ url_for('admin.properties') }}"
+       class="bg-white rounded-2xl border border-gray-100 p-6 hover:shadow-md hover:border-primary-200 transition-all group">
+      <div class="text-4xl mb-3">🏡</div>
+      <h3 class="font-semibold text-gray-800 group-hover:text-primary-600">Gerenciar Propriedades</h3>
+      <p class="text-sm text-gray-500 mt-1">Aprovar, suspender ou remover anúncios</p>
+    </a>
+    <a href="{{ url_for('admin.bookings') }}"
+       class="bg-white rounded-2xl border border-gray-100 p-6 hover:shadow-md hover:border-primary-200 transition-all group">
+      <div class="text-4xl mb-3">📋</div>
+      <h3 class="font-semibold text-gray-800 group-hover:text-primary-600">Gerenciar Reservas</h3>
+      <p class="text-sm text-gray-500 mt-1">Acompanhar todas as reservas da plataforma</p>
+    </a>
+  </div>
+
+  <!-- TODO: [BACKEND] Adicionar gráfico de reservas por mês -->
+  <!-- TODO: [BACKEND] Adicionar tabela de atividades recentes -->
+</div>
+{% endblock %}

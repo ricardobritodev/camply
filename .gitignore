@@ -1,0 +1,61 @@
+# Ambiente virtual
+venv/
+env/
+.venv/
+ENV/
+
+# Variáveis de ambiente
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# Banco de dados local
+*.db
+*.sqlite
+*.sqlite3
+instance/
+
+# Distribuição / empacotamento
+dist/
+build/
+*.egg-info/
+*.egg
+
+# Pytest
+.pytest_cache/
+.coverage
+htmlcov/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Logs
+*.log
+
+# Uploads de usuários
+app/static/uploads/
+
+# Migrations (manter apenas o diretório vazio com .gitkeep)
+# migrations/versions/*.py  # NÃO ignorar — manter migrations no repositório
+
+PROMPT.md

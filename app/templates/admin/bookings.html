@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Reservas — Admin Camply{% endblock %}
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 py-10">
+  <h1 class="text-2xl font-bold text-gray-800 mb-8">Reservas</h1>
+  <div class="bg-white rounded-2xl border border-gray-100 overflow-hidden">
+    <table class="w-full text-sm">
+      <thead class="bg-gray-50 text-gray-500 text-xs uppercase tracking-wide">
+        <tr>
+          <th class="px-6 py-4 text-left">#</th>
+          <th class="px-6 py-4 text-left">Propriedade</th>
+          <th class="px-6 py-4 text-left">Hóspede</th>
+          <th class="px-6 py-4 text-left">Check-in</th>
+          <th class="px-6 py-4 text-left">Check-out</th>
+          <th class="px-6 py-4 text-left">Total</th>
+          <th class="px-6 py-4 text-left">Status</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-50">
+        {% set sc = {'pending':'bg-yellow-100 text-yellow-700','confirmed':'bg-green-100 text-green-700','cancelled':'bg-red-100 text-red-600','completed':'bg-blue-100 text-blue-700','refunded':'bg-gray-100 text-gray-500'} %}
+        {% for b in bookings %}
+        <tr class="hover:bg-gray-50 transition-colors">
+          <td class="px-6 py-4 text-gray-400">{{ b.id }}</td>
+          <td class="px-6 py-4 text-gray-700 max-w-[160px] truncate">{{ b.property.title }}</td>
+          <td class="px-6 py-4 text-gray-500">{{ b.guest.name }}</td>
+          <td class="px-6 py-4 text-gray-500">{{ b.check_in.strftime('%d/%m/%Y') }}</td>
+          <td class="px-6 py-4 text-gray-500">{{ b.check_out.strftime('%d/%m/%Y') }}</td>
+          <td class="px-6 py-4 font-semibold text-gray-800">R$ {{ "%.2f"|format(b.total_price|float) }}</td>
+          <td class="px-6 py-4">
+            <span class="px-2 py-0.5 rounded-full text-xs font-semibold {{ sc.get(b.status, 'bg-gray-100 text-gray-600') }}">
+              {{ b.status }}
+            </span>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

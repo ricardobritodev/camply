@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+
+{% block title %}{% if action == 'new' %}Nova propriedade{% else %}Editar propriedade{% endif %} — Camply{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto px-4 py-10">
+  <h1 class="text-2xl font-bold text-gray-800 mb-8">
+    {% if action == 'new' %}Anunciar propriedade{% else %}Editar propriedade{% endif %}
+  </h1>
+
+  <form method="POST"
+        action="{% if action == 'new' %}{{ url_for('properties.new_property') }}{% else %}{{ url_for('properties.edit_property', property_id=property.id) }}{% endif %}"
+        class="space-y-8" enctype="multipart/form-data">
+    {{ form.hidden_tag() }}
+
+    <!-- Seção: Informações básicas -->
+    <section class="bg-white rounded-2xl border border-gray-100 p-6 space-y-5">
+      <h2 class="text-lg font-semibold text-gray-700 border-b border-gray-100 pb-3">Informações básicas</h2>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">{{ form.title.label.text }}</label>
+        {{ form.title(class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary-300", placeholder="Ex: Sítio Água Viva com piscina e churrasqueira") }}
+        {% for e in form.title.errors %}<p class="text-red-500 text-xs mt-1">{{ e }}</p>{% endfor %}
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">{{ form.property_type.label.text }}</label>
+        {{ form.property_type(class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary-300") }}
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">{{ form.description.label.text }}</label>
+        {{ form.description(class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary-300 min-h-[140px]", placeholder="Descreva sua propriedade em detalhes...") }}
+        {% for e in form.description.errors %}<p class="text-red-500 text-xs mt-1">{{ e }}</p>{% endfor %}
+      </div>
+    </section>
+
+    <!-- Seção: Localização -->
+    <section class="bg-white rounded-2xl border border-gray-100 p-6 space-y-5">
+      <h2 class="text-lg font-semibold text-gray-700 border-b border-gray-100 pb-3">Localização</h2>
+
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">{{ form.cep.label.text }}</label>
+          {{ form.cep(class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary-300", placeholder="00000-000") }}
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">{{ form.number.label.text }}</label>
+          {{ form.number(class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary-300") }}
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">{{ form.street.label.text }}</label>
+        {{ form.street(class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary-300") }}
+      </div>
+
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">{{ form.city.label.text }}</label>
+          {{ form.city(class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary-300") }}
+          {% for e in form.city.errors %}<p class="text-red-500 text-xs mt-1">{{ e }}</p>{% endfor %}
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">{{ form.state.label.text }}</label>
+          {{ form.state(class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary-300") }}
+        </div>
+      </div>
+    </section>
+
+    <!-- Seção: Preço e capacidade -->
+    <section class="bg-white rounded-2xl border border-gray-100 p-6 space-y-5">
+      <h2 class="text-lg font-semibold text-gray-700 border-b border-gray-100 pb-3">Preço e capacidade</h2>
+
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">{{ form.price_per_night.label.text }}</label>
+          {{ form.price_per_night(class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary-300") }}
+          {% for e in form.price_per_night.errors %}<p class="text-red-500 text-xs mt-1">{{ e }}</p>{% endfor %}
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">{{ form.cleaning_fee.label.text }}</label>
+          {{ form.cleaning_fee(class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary-300") }}
+        </div>
+      </div>
+
+      <div class="grid grid-cols-4 gap-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">{{ form.max_guests.label.text }}</label>
+          {{ form.max_guests(class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary-300") }}
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">{{ form.bedrooms.label.text }}</label>
+          {{ form.bedrooms(class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary-300") }}
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">{{ form.beds.label.text }}</label>
+          {{ form.beds(class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary-300") }}
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">{{ form.bathrooms.label.text }}</label>
+          {{ form.bathrooms(class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary-300") }}
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">{{ form.min_nights.label.text }}</label>
+          {{ form.min_nights(class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary-300") }}
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">{{ form.max_nights.label.text }}</label>
+          {{ form.max_nights(class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary-300") }}
+        </div>
+      </div>
+    </section>
+
+    <!-- Seção: Regras -->
+    <section class="bg-white rounded-2xl border border-gray-100 p-6">
+      <h2 class="text-lg font-semibold text-gray-700 border-b border-gray-100 pb-3 mb-5">Regras</h2>
+      <label class="block text-sm font-medium text-gray-700 mb-1">{{ form.rules.label.text }}</label>
+      {{ form.rules(class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary-300 min-h-[100px]", placeholder="Ex: Não é permitido fumar. Respeite o sossego após as 22h.") }}
+    </section>
+
+    <!-- TODO: [FRONTEND] Seção de upload de fotos com preview (Alpine.js) -->
+    <!-- TODO: [FRONTEND] Seção de seleção de comodidades com checkboxes -->
+
+    <div class="flex gap-4">
+      <button type="submit"
+              class="flex-1 bg-primary-500 hover:bg-primary-600 text-white font-bold py-4 rounded-xl transition-colors shadow-md">
+        {{ form.submit.label.text }}
+      </button>
+      <a href="{{ url_for('main.index') }}"
+         class="px-6 py-4 border border-gray-200 text-gray-600 font-medium rounded-xl hover:bg-gray-50 transition-colors text-center">
+        Cancelar
+      </a>
+    </div>
+  </form>
+</div>
+{% endblock %}
