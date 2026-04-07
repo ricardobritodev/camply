@@ -59,29 +59,27 @@ class Review(db.Model):
 def after_review_insert(mapper, connection, target):
     """Recalcula avg_rating e reviews_count após inserção de review."""
     # TODO: [BACKEND] Executar em background para não bloquear a request
-    _schedule_property_stats_update(connection, target.property_id)
+    _update_property_stats(connection, target.property_id)
 
 
 @event.listens_for(Review, "after_delete")
 def after_review_delete(mapper, connection, target):
     """Recalcula avg_rating e reviews_count após remoção de review."""
-    _schedule_property_stats_update(connection, target.property_id)
+    _update_property_stats(connection, target.property_id)
 
 
-def _schedule_property_stats_update(connection, property_id: int) -> None:
-    """Agenda atualização de estatísticas da propriedade ao final da transação."""
-    from sqlalchemy import event as sa_event, text
+def _update_property_stats(connection, property_id: int) -> None:
+    """Atualiza avg_rating e reviews_count da propriedade diretamente na conexão."""
+    from sqlalchemy import text
 
-    @sa_event.listens_for(connection, "after_commit", once=True)
-    def _do_update(conn):
-        conn.execute(
-            text(
-                """
-                UPDATE properties SET
-                    avg_rating   = COALESCE((SELECT AVG(rating) FROM reviews WHERE property_id = :pid), 0),
-                    reviews_count = (SELECT COUNT(*) FROM reviews WHERE property_id = :pid)
-                WHERE id = :pid
-                """
-            ),
-            {"pid": property_id},
-        )
+    connection.execute(
+        text(
+            """
+            UPDATE properties SET
+                avg_rating    = COALESCE((SELECT AVG(rating) FROM reviews WHERE property_id = :pid), 0),
+                reviews_count = (SELECT COUNT(*) FROM reviews WHERE property_id = :pid)
+            WHERE id = :pid
+            """
+        ),
+        {"pid": property_id},
+    )
